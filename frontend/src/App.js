@@ -1,20 +1,37 @@
 import {getApi} from "./Client"
+import "./App.css"
+import TickerRow from "./TickerRow"
+import {useState, useEffect} from "react"
+import Container from "react-bootstrap/Container"
+import Table from "react-bootstrap/Table"
 
 const App = (props) => {
 
-  const getServiceEndpoint = () => {
-    console.log("ServiceEndpoint: " + process.env.REACT_APP_ENDPOINT)
-    getApi("/stocks/NICE", (err, data) => {
-      if(err) console.log(err)
-      console.log(data)
-    })
-    return "Hi";
-  }
+  const [tickers, setTickers] = useState([])
+
+  useEffect(() => {
+      getApi('/stocks', (err, data) => {
+        if(err) throw(err)
+        setTickers(data.tickers);
+      })
+  }, [])
 
   return (
-    <div>
-      <h1>{getServiceEndpoint()}</h1>
-    </div>
+    <Container className="p-5">
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Ticker</th>
+            <th>Limit</th>
+          </tr>
+        </thead>
+        <tbody>
+          { tickers.map((tick) => {
+            return <TickerRow key={tick.ticker} ticker={tick}/>
+          })}
+        </tbody>
+      </Table>
+    </Container>
   );
 }
 
