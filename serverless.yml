@@ -1,0 +1,70 @@
+service: serverless-stock-watch
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: '20201221'
+  environment:
+    TICKER_TABLE: serverless-stock-ticker-tickerTable
+    FINCH_BUCKET_NAME: serverless-stock-watch-jv-12345678
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - dynamodb:Scan
+            - dynamodb:UpdateItem
+            - dynamodb:PutItem
+            - dynamodb:GetItem
+          Resource: "arn:aws:dynamodb:*:*:table/${self:provider.environment.TICKER_TABLE}"
+
+functions:
+  get_ticker:
+    handler: backend/stocks.get_ticker
+    events:
+      - http:
+          path: /stocks/{ticker}
+          method: get
+          cors: true
+  post_ticker:
+    handler: backend/stocks.update_ticker
+    events:
+      - http:
+          path: /stocks
+          method: post
+          cors: true
+  get_all_tickers:
+    handler: backend/stocks.get_all
+    events:
+      - http:
+          path: /stocks
+          method: get
+          cors: true
+
+
+resources:
+  Resources:
+    tickerTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.TICKER_TABLE}
+        AttributeDefinitions:
+          - AttributeName: ticker
+            AttributeType: S
+        KeySchema:
+          - AttributeName: ticker
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+plugins:
+  - serverless-finch
+
+custom:
+  client:
+    bucketName: ${self:provider.environment.FINCH_BUCKET_NAME}
+    distributionFolder: frontend/build
+    errorDocument: index.html
