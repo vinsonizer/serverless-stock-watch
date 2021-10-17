@@ -16,7 +16,7 @@ exports.handler = async (event, context) => {
     console.log(`put result is ${JSON.stringify(result)}`)
     return await lambda.wrapResponse(stock)
   } catch (err) {
-    console.log(err)
+    console.log(`${JSON.stringify(err, null, 2)}`)
     return await lambda.wrapError(err)
   }
 }

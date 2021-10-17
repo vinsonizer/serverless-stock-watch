@@ -9,6 +9,7 @@ exports.handler = async (event, context) => {
     })
     return await lambda.wrapResponse(result)
   } catch (err) {
+    console.log(`${JSON.stringify(err, null, 2)}`)
     return await lambda.wrapError(err)
   }
 }
