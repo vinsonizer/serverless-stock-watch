@@ -29,6 +29,5 @@ exports.put = async (key, item) => {
     Key: key,
     Item: item
   }
-  console.log(`params for put is ${JSON.stringify(putParams)}`)
   return await dynamodb.put(putParams).promise()
 }

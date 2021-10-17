@@ -4,7 +4,6 @@ const headers = {
 }
 
 exports.wrapResponse = (result) => {
-  console.log(`wrapping ${JSON.stringify(result)}`)
   return { statusCode: 200, headers: headers, body: JSON.stringify(result) }
 }
 

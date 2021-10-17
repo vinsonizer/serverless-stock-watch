@@ -9,11 +9,9 @@ exports.handler = async (event, context) => {
       symbol: input.symbol,
       limit: input.limit
     }
-    console.log(`stock is ${JSON.stringify(stock)}`)
-    const result = await dynamo.put({
+    await dynamo.put({
       symbol: stock.symbol
     }, stock)
-    console.log(`put result is ${JSON.stringify(result)}`)
     return await lambda.wrapResponse(stock)
   } catch (err) {
     console.log(`${JSON.stringify(err, null, 2)}`)
