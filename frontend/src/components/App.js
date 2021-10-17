@@ -1,7 +1,7 @@
 import "./App.css"
 import Header from "./Header"
-import TickerGrid from "./TickerGrid"
-import TickerDetail from "./TickerDetail"
+import StockGrid from "./StockGrid"
+import StockDetail from "./StockDetail"
 import Container from "react-bootstrap/Container"
 import {Route, Switch, BrowserRouter} from "react-router-dom"
 
@@ -11,11 +11,11 @@ const App = (props) => {
     <Header/>
     <BrowserRouter>
       <Switch>
-        <Route path="/ticker/:tickerId">
-          <TickerDetail/>
+        <Route path="/stocks/:symbol">
+          <StockDetail/>
         </Route>
         <Route path="*">
-          <TickerGrid/>
+          <StockGrid/>
         </Route>
       </Switch>
     </BrowserRouter>

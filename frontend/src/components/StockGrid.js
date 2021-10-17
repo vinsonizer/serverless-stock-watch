@@ -1,19 +1,19 @@
 import {getApi} from "./../Client"
-import TickerRow from "./TickerRow"
+import StockRow from "./StockRow"
 import {useState, useEffect} from "react"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Table from "react-bootstrap/Table"
 
-const TickerGrid = (props) => {
+const StockGrid = (props) => {
 
-  const [tickers, setTickers] = useState([])
+  const [stocks, setStocks] = useState([])
 
   useEffect(() => {
     getApi('/stocks', (err, data) => {
-      if (err) 
+      if (err)
         throw(err)
-      setTickers(data)
+      setStocks(data)
     })
   }, [])
 
@@ -22,14 +22,14 @@ const TickerGrid = (props) => {
       <Table striped="striped" bordered="bordered" hover="hover">
         <thead>
           <tr>
-            <th>Ticker</th>
+            <th>Symbol</th>
             <th>Limit</th>
           </tr>
         </thead>
         <tbody>
           {
-            tickers.map((tick) => {
-              return <TickerRow key={tick.ticker} ticker={tick}/>
+            stocks.map((stock) => {
+              return <StockRow key={stock.symbol} stock={stock}/>
             })
           }
         </tbody>
@@ -38,4 +38,4 @@ const TickerGrid = (props) => {
   </Row>)
 }
 
-export default TickerGrid;
+export default StockGrid;
