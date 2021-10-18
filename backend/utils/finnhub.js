@@ -1,16 +1,27 @@
 const finnhub = require('finnhub')
 
-exports.lookup = (stock) => {
-  const api_key = finnhub.ApiClient.instance.authentications['api_key']
-  api_key.apiKey = 'c5lim32ad3if1qn1katg'
-  const finnhubClient = new finnhub.DefaultApi()
-  console.log(`finnhubClient is ${finnhubClient}`)
+const apiKey = finnhub.ApiClient.instance.authentications.api_key
+apiKey.apiKey = process.env.API_KEY
+const finnhubClient = new finnhub.DefaultApi()
 
-  finnhubClient.quote(stock.symbol, (error, data, response) => {
-    console.log('inside quote function')
-    if (error) {
-      console.log(error)
-    }
-    console.log(data)
+function getAsyncQuote (symbol) {
+  return new Promise(function (resolve, reject) {
+    finnhubClient.quote(symbol, function (err, data, response) {
+      if (err) reject(err)
+      else resolve(data, response)
+    })
   })
+}
+
+exports.lookup = async (symbol) => {
+  const quote = await getAsyncQuote(symbol)
+  return {
+    currentPrice: quote.c,
+    change: quote.d,
+    percentChange: quote.dp,
+    highForDay: quote.h,
+    lowForDay: quote.l,
+    openForDay: quote.o,
+    previousClose: quote.pc
+  }
 }

@@ -6,7 +6,6 @@ useDotenv: true
 package:
   patterns:
     - '!frontend/**'
-    - '!node_modules/**'
 
 provider:
   name: aws
@@ -14,6 +13,7 @@ provider:
   lambdaHashingVersion: '20201221'
   environment:
     STOCK_TABLE: ${env:STOCK_TABLE}
+    API_KEY: ${env:API_KEY}
   iam:
     role:
       statements:
@@ -45,6 +45,13 @@ functions:
     events:
       - http:
           path: /stocks
+          method: get
+          cors: true
+  get_quote:
+    handler: backend/get_quote.handler
+    events:
+      - http:
+          path: /stocks/{symbol}/quote
           method: get
           cors: true
 

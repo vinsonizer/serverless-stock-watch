@@ -36,9 +36,8 @@ describe('Stocks', function () {
       const getStock = require('../backend/get_stock')
       const input = {
         pathParameters: {
-          symbol: 'NICE'
+          symbol: testStock1.symbol
         }
-
       }
       var result = await getStock.handler(input)
       assert.strictEqual(result.body, JSON.stringify(testStock1))
@@ -56,8 +55,8 @@ describe('Stocks', function () {
     it('should return updatedStock when requested', async function () {
       const updateStock = require('../backend/update_stock')
       const updatedStock = {
-        symbol: 'NICE',
-        limit: 300
+        symbol: testStock1.symbol,
+        limit: testStock1.limit + 20
       }
       const input = {
         body: JSON.stringify(updatedStock)
